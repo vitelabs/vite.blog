@@ -57,7 +57,7 @@ wechat_subscriber:
 
 custom_logo:
   enabled: true
-  image: https://doc.vite.org/logo_black.svg
+  image: /uploads/logo_black.svg
 
 # Disqus
 disqus:
@@ -114,6 +114,6 @@ sidebar:
   display: hide
 
 reading_progress:
-  enable: true
+  enable: false
   color: "#37c6c0"
   height: 2px
