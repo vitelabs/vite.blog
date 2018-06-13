@@ -1,0 +1,3 @@
+[submodule "themes/next"]
+	path = themes/next
+	url = git@github.com:vitelabs/hexo-theme-next.git
