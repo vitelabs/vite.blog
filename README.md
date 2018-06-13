@@ -1,6 +1,6 @@
 # vite.blog
 
-> Official blog for Vite Labs.
+> Official blog for Vite Labs
 
 ## Start
 
