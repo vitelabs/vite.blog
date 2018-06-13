@@ -1,0 +1,119 @@
+seo: true
+
+cache:
+  enable: false
+
+menu:
+  home: / || home
+  tags: /tags/ || tags
+  categories: /categories/ || th
+  archives: /archives/ || archive
+#  schedule: /schedule/ || calendar
+#  sitemap: /sitemap.xml || sitemap
+#  commonweal: /404/ || heartbeat
+
+
+menu_settings:
+  icons: true
+  badges: true
+
+
+social:
+  Website: http://vite.org/
+  GitHub: https://github.com/vitelabs || github
+  Bitcointalk: https://bitcointalk.org/index.php?topic=4438416
+#  E-Mail: mailto:yourname@gmail.com || envelope
+#  Google: https://plus.google.com/yourname || google
+  Twitter: https://twitter.com/vitelabs || twitter
+#  FB Page: https://www.facebook.com/yourname || facebook
+#  VK Group: https://vk.com/yourname || vk
+#  StackOverflow: https://stackoverflow.com/yourname || stack-overflow
+#  YouTube: https://youtube.com/yourname || youtube
+#  Instagram: https://instagram.com/yourname || instagram
+#  Skype: skype:yourname?call|chat || skype
+  Telegram English: https://t.me/vite_en || telegram
+  Telegram Chinese: https://t.me/vite_zh || telegram
+  Telegram Announcement: https://t.me/vite_ann || telegram
+  Reddit: https://www.reddit.com/r/vitelabs || reddit
+  Discord: https://discordapp.com/invite/CsVY76q
+
+avatar:
+  # in theme directory(source/images): /images/avatar.gif
+  # in site  directory(source/uploads): /uploads/avatar.gif
+  # You can also use other linking images.
+  url: /uploads/logo_appstore.png
+  # If true, the avatar would be dispalyed in circle.
+  rounded: true
+  # The value of opacity should be choose from 0 to 1 to set the opacity of the avatar.
+  opacity: 1
+  # If true, the avatar would be rotated with the cursor.
+  rotated: false
+
+# Wechat Subscriber
+wechat_subscriber:
+  enabled: true
+  qcode: /uploads/vitelabs_wechat.jpg
+  description: You can follow our wechat to get more info about vite.
+
+custom_logo:
+  enabled: true
+  image: https://doc.vite.org/logo_black.svg
+
+# Disqus
+disqus:
+  enable: true
+  shortname: vitelabs
+  count: true
+  lazyload: true
+
+baidu_push: true
+
+footer:
+  powered:
+    enable: false
+  theme:
+    enable: false
+  custom_text: <a target="_blank" href="https://vite.org"><b>Let's do something cool!</b></a>
+
+math:
+  enable: true
+
+post_edit:
+  enable: true
+  url: https://github.com/theme-next/theme-next.org/_posts/tree/master/ # Link for view source.
+
+related_posts:
+  enable: true
+  title: # custom header, leave empty to use the default one
+  display_in_home: true
+  params:
+    maxCount: 5
+    #PPMixingRate: 0.0
+    #isDate: false
+    #isImage: false
+    #isExcerpt: false
+
+favicon:
+  small: /images/favicon-16x16.png
+  medium: /images/favicon-32x32.png
+  apple_touch_icon: /images/icon.png
+  safari_pinned_tab: /images/icon.png
+  android_manifest: /images/manifest.json
+  ms_browserconfig: /images/browserconfig.xml
+
+sidebar:
+  # Sidebar Position, available value: left | right (only for Pisces | Gemini).
+  position: left
+  #position: right
+
+  # Sidebar Display, available value (only for Muse | Mist):
+  #  - post    expand on posts automatically. Default.
+  #  - always  expand for all pages automatically
+  #  - hide    expand only when click on the sidebar toggle icon.
+  #  - remove  Totally remove sidebar including sidebar toggle.
+  display: hide
+
+reading_progress:
+  enable: true
+  color: "#37c6c0"
+  height: 2px
