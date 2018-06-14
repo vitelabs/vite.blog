@@ -4,13 +4,14 @@
 
 # Site
 title: Vite Labs
-subtitle: Let's do something cool
+subtitle: Let's create something cool
 description: Vite - A Next Generation High-performance Decentralized Application Platform
 keywords: Vite, DAG, Bitcoin, Blockchain
 author: Vite Labs
 language:
 - en
 - zh-CN
+- zh-HK
 timezone:
 
 # URL
@@ -87,3 +88,19 @@ deploy:
 i18n:
   type: [page, post]
   generator: [index, archive, category, tag]
+
+algolia:
+  applicationID: 'I45L10XY0D'
+  appId: 'I45L10XY0D'
+  apiKey: 'ec19798f5668b70f85c604a62e631260'
+  indexName: 'vite.blog'
+  chunkSize: 5000
+  fields:
+      - content:strip:truncate,0,500
+      - excerpt:strip
+      - gallery
+      - permalink
+      - photos
+      - slug
+      - tags
+      - title

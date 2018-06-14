@@ -1,3 +1,6 @@
 [submodule "themes/next"]
 	path = themes/next
 	url = https://github.com/vitelabs/hexo-theme-next.git
+[submodule "source/lib/needsharebutton"]
+	path = source/lib/needsharebutton
+	url = https://github.com/theme-next/theme-next-needmoreshare2

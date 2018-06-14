@@ -73,14 +73,14 @@ footer:
     enable: false
   theme:
     enable: false
-  custom_text: <a target="_blank" href="https://vite.org"><b>Let's do something cool!</b></a>
+  custom_text: <a target="_blank" href="https://vite.org"><b>Let's create something cool!</b></a>
 
 math:
   enable: true
 
 post_edit:
   enable: true
-  url: https://github.com/theme-next/theme-next.org/_posts/tree/master/ # Link for view source.
+  url: https://github.com/vitelabs/vite.blog/edit/master/source/_posts/ # Link for view source.
 
 related_posts:
   enable: true
@@ -117,3 +117,62 @@ reading_progress:
   enable: false
   color: "#37c6c0"
   height: 2px
+
+bookmark:
+  enable: false
+  # if auto
+  #   - save the reading position when closing the page
+  #   - or clicking the bookmark-icon
+  # if manual, only save it by clicking the bookmark-icon
+  save: auto
+
+vendors:
+  bookmark:
+  algolia_instant_js: https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.js
+  algolia_instant_css: https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.min.css
+
+add_this_id: ra-5b21d5d41d053c18
+
+# needMoreShare2
+# https://github.com/revir/need-more-share2
+
+needmoreshare2_js: /lib/needsharebutton/needsharebutton.js
+needmoreshare2_css: /lib/needsharebutton/needsharebutton.css
+
+# NeedMoreShare2
+# Dependencies: https://github.com/theme-next/theme-next-needmoreshare2
+# See: https://github.com/revir/need-more-share2
+# Also see: https://github.com/DzmVasileusky/needShareButton
+# iconStyle: default | box
+# boxForm: horizontal | vertical
+# position: top / middle / bottom + Left / Center / Right
+# networks: Weibo,Wechat,Douban,QQZone,Twitter,Linkedin,Mailto,Reddit,
+#           Delicious,StumbleUpon,Pinterest,Facebook,GooglePlus,Slashdot,
+#           Technorati,Posterous,Tumblr,GoogleBookmarks,Newsvine,
+#           Evernote,Friendfeed,Vkontakte,Odnoklassniki,
+
+needmoreshare2:
+  enable: true
+  postbottom:
+    enable: false
+    options:
+      iconStyle: box
+      boxForm: horizontal
+      position: bottomCenter
+      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook
+  float:
+    enable: true
+    options:
+      iconStyle: box
+      boxForm: horizontal
+      position: middleRight
+      networks: Twitter,Facebook,GooglePlus,Reddit,Tumblr,GoogleBookmarks,Weibo,Pinterest,Wechat
+
+algolia_search:
+  enable: true
+  hits:
+    per_page: 10
+  labels:
+    input_placeholder: Search for Posts
+    hits_empty: "We didn't find any results for the search: ${query}"
+    hits_stats: "${hits} results found in ${time} ms"
