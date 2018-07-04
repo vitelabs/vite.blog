@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "hexo server",
+    "dev": "hexo server -d",
     "p": "hexo clean && hexo algolia && hexo g"
   },
   "hexo": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "hexo": "^3.2.0",
+    "hexo-admin": "^2.3.0",
     "hexo-algolia": "^1.2.5",
     "hexo-algoliasearch": "^0.3.0",
     "hexo-generator-archive": "^0.1.4",
@@ -20,6 +21,7 @@
     "hexo-generator-index-i18n": "^0.2.1",
     "hexo-generator-tag": "^0.2.0",
     "hexo-helper-page-languages": "^0.0.1",
+    "hexo-related-popular-posts": "^3.0.1",
     "hexo-renderer-ejs": "^0.3.0",
     "hexo-renderer-marked": "^0.3.0",
     "hexo-renderer-stylus": "^0.3.1",

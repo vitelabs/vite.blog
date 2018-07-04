@@ -15,7 +15,7 @@ menu:
 
 menu_settings:
   icons: true
-  badges: true
+  badges: false
 
 
 social:
@@ -31,9 +31,9 @@ social:
 #  YouTube: https://youtube.com/yourname || youtube
 #  Instagram: https://instagram.com/yourname || instagram
 #  Skype: skype:yourname?call|chat || skype
-  Telegram English: https://t.me/vite_en || telegram
-  Telegram Chinese: https://t.me/vite_zh || telegram
-  Telegram Announcement: https://t.me/vite_ann || telegram
+  English: https://t.me/vite_en || telegram
+  Chinese: https://t.me/vite_zh || telegram
+  Announcement: https://t.me/vite_ann || telegram
   Reddit: https://www.reddit.com/r/vitelabs || reddit
   Discord: https://discordapp.com/invite/CsVY76q
 
@@ -83,7 +83,7 @@ post_edit:
   url: https://github.com/vitelabs/vite.blog/edit/master/source/_posts/ # Link for view source.
 
 related_posts:
-  enable: true
+  enable: false
   title: # custom header, leave empty to use the default one
   display_in_home: true
   params:
@@ -113,11 +113,6 @@ sidebar:
   #  - remove  Totally remove sidebar including sidebar toggle.
   display: hide
 
-reading_progress:
-  enable: false
-  color: "#37c6c0"
-  height: 2px
-
 bookmark:
   enable: false
   # if auto
@@ -130,6 +125,7 @@ vendors:
   bookmark:
   algolia_instant_js: https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.js
   algolia_instant_css: https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.min.css
+  reading_progress: https://cdn.jsdelivr.net/gh/theme-next/theme-next-reading-progress@1.1/reading_progress.min.js
 
 add_this_id: ra-5b21d5d41d053c18
 
@@ -183,3 +179,72 @@ google_site_verification: TFFddVIg_vEByGvDAQepGaiVHv8bTyugfg_TTtu8pbQ
 
 # Google Analytics
 google_analytics: UA-120867177-1
+
+scheme: Gemini
+
+auto_excerpt:
+  enable: false
+  length: 500
+
+reading_progress:
+  enable: true
+  color: "#37c6c0"
+  height: 2px
+
+lazyload: false
+
+# Progress bar in the top during page loading.
+# Dependencies: https://github.com/theme-next/theme-next-pace
+pace: false
+# Themes list:
+#pace-theme-big-counter
+#pace-theme-bounce
+#pace-theme-barber-shop
+#pace-theme-center-atom
+#pace-theme-center-circle
+#pace-theme-center-radar
+#pace-theme-center-simple
+#pace-theme-corner-indicator
+#pace-theme-fill-left
+#pace-theme-flash
+#pace-theme-loading-bar
+#pace-theme-mac-osx
+#pace-theme-minimal
+# For example
+# pace_theme: pace-theme-center-simple
+pace_theme: pace-theme-minimal
+
+
+# Note tag (bs-callout).
+note:
+  # Note tag style values:
+  #  - simple    bs-callout old alert style. Default.
+  #  - modern    bs-callout new (v2-v3) alert style.
+  #  - flat      flat callout style with background, like on Mozilla or StackOverflow.
+  #  - disabled  disable all CSS styles import of note tag.
+  style: modern
+  icons: true
+  border_radius: 3
+  # Offset lighter of background in % for modern and flat styles (modern: -12 | 12; flat: -18 | 6).
+  # Offset also applied to label tag variables. This option can work with disabled note tag.
+  light_bg_offset: 0
+
+# Label tag.
+label: true
+
+# Tabs tag.
+tabs:
+  enable: true
+  transition:
+    tabs: false
+    labels: true
+  border_radius: 0
+
+scroll_to_more: true
+
+# Declare license on posts
+post_copyright:
+  enable: true
+  license: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a>
+
+post_footer: true

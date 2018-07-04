@@ -1,15 +1,19 @@
----
-title: "VITE Update — May 2018"
+title: VITE Update — May 2018
+tags:
+  - Report
+categories:
+  - Monthly Report
 date: 2018-06-14 19:58:20
-tags: [Report]
-categories: [Monthly Report]
 ---
+![upload successful](/images/pasted-13.png)
 
 Hello world! Thanks for patiently waiting for this first post from Vite. Going forward, we will be regularly sharing development in our engineering and BD efforts.
 
 ## CAPITAL RAISING
 
 In our private sale, we were fortunate to have received backing from a number of top crypto funds, such as BitMain, Node Capital, Link VC, and Genesis Capital. We appreciate their recognition of our values, strategic positioning, technology, and team.
+
+<!-- more -->
 
 ## RECRUITING
 
@@ -40,3 +44,6 @@ With every update, we will share a few bullets our readers may find interesting:
 * Also, here is an old post about our technology from our CEO.
 
 Thanks for all your support, and until next time!
+
+
+---
