@@ -39,6 +39,7 @@ hexo new post hello-world --lang zh-CN
 ### How to upload image?
 
 ```
+npm i
 npm run dev
 ```
 
