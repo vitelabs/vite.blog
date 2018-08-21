@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "hexo server -d",
-    "p": "hexo clean && hexo algolia && hexo g"
+    "p": "hexo clean && hexo g"
   },
   "hexo": {
     "version": "3.7.1"
