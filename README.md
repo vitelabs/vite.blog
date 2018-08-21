@@ -4,6 +4,12 @@
 
 ## Start
 
+clone project and clone submodule
+
+```
+git clone https://github.com/vitelabs/vite.blog.git --recursive
+```
+
 Install hexo
 
 ```
@@ -50,4 +56,4 @@ Visit `localhost:4000/admin`. In the admin page, you can paste your image to edi
 Please make sure the image filename is unique.
 ![](https://cdn.discordapp.com/attachments/425845491478298624/481333553032855562/unknown.png)
 
-*But you should only use `localhost:4000/admin` as a editor. If you want to create post, Please use cli. *
+But you should only use `localhost:4000/admin` as a editor. If you want to create post, Please use cli. 
