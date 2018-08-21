@@ -11,6 +11,7 @@ P2P is generally called peer-to-peer network. In comparison to the traditional C
 1. Decentralization. Dispatched center and database does not exist in P2P network.
 2. Each of the nodes contains the same logic and state<sup>1</sup>, There is no concept of client or server.
 3. Unreliability. The connections between nodes are unreliable.
+<!-- more -->
 
 <div style="text-align: center;display:flex;">
 <div style="flex: 1;">
