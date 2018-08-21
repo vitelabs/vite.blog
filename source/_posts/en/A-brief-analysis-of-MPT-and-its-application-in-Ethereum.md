@@ -5,6 +5,7 @@ tags:
 ---
 # Introduction
 The data structure of Ethereum ledger is a blockchain list, which is the original data structure of  blockchain. Nowadays, some other data structures are derived such as DAG (Directed acyclic graph). In Ethereum, mining is a way to generate a block, the right to "mine" a block is that each node gets a fair competition through the PoW mechanism. The data contained in each block can refer to the Ethereum yellow paper, transaction list is included in these data. Transaction list is represented by a data structure called MPT (Merkle Patricia Tree) in Ethereum. MPT is evolved by Trie Tree and Merkle Tree, hence it has the characteristics of both of them.
+<!-- more -->
 
 # Trie Tree
 To get a better understanding of MPT, we should get to know about Trie Tree first. Trie Tree is a kind of dictionary tree, the figure below is a Trie Tree structure:
