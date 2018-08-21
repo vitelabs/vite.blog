@@ -4,6 +4,12 @@
 
 ## Start
 
+clone project and clone submodule
+
+```
+git clone https://github.com/vitelabs/vite.blog.git --recursive
+```
+
 Install hexo
 
 ```
