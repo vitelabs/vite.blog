@@ -11,7 +11,7 @@ P2P 是 peer-to-peer 的简写，一般称为对等网络。有别于传统的 C
 1. 没有同一的调度中心和数据库，既去中心化
 2. 节点具有相同的逻辑和地位<sup>1</sup>，既是 client 又是 server
 3. 节点之间的连接都是不可靠的
-
+<!-- more -->
 <div style="text-align: center;display:flex;">
 <div style="flex: 1;">
 C/S 架构<br>
