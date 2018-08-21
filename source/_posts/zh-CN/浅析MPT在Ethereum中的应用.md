@@ -5,6 +5,7 @@ tags:
 ---
 # 序言
 Ethereum的账本结构是一个单链结构(Block List)，是区块链最开始的数据结构，现在也衍生出一些其他数据结构，比如DAG（Directed acyclic graph）。在Ethereum中，需要通过“挖矿”产出一个block，“挖”一个block的权利是每个节点通过PoW机制公平竞争得到。每个block包含的数据可以参看Ethereum的黄皮书，这些数据里包含交易列表。交易列表在Ethereum中通过MPT（Merkle Patricia Tree）这种数据结构来表示的。MPT由Trie Tree和Merkle Tree演化过来，因此同时具备Trie Tree和Merkle Tree的特点。
+<!-- more -->
 
 # Trie Tree
 为了更好地了解MPT，我们先来了解一下Trie Tree，Trie Tree是一种字典树，下图就是一个Trie Tree结构：
