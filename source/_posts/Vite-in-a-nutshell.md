@@ -142,7 +142,7 @@ The mining account will periodically generate the snapshot block and insert it i
 # Summary
 The key point of this article is to briefly introduce the main process of [naive-vite](https://github.com/viteshan/naive-vite), and at the same time let everyone know the fundamental principles of Vite through this simple demo.
 
-For more details, [visit official Vite website](http://vite.org/), and watch [the official implementation of the first version on Github](https://github.com/vitelabs/go-vite).
+For more details, [visit official Vite website](http://vite.org/) and [vite blog](https://vite.blog/), and watch [the official implementation of the first version on Github](https://github.com/vitelabs/go-vite).
 
 
 
