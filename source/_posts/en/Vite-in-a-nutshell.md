@@ -8,17 +8,16 @@ date: 2018-08-16 09:46:00
 
 
 As mentioned in our white paper, Vite uses DAG (directed acyclic graph) technology for its core ledger structure, which stores transaction information for every account.
-
 In order to improve the data security of the whole DAG ledger and make it tamper-resistant, Vite has created the concept of Snapshot Chain.
-
 Since the white paper is abstract, this article hopes to describe the core DAG ledger structure and snapshot chain with the help of 500 lines of code.
+<!-- more -->
 
-## Core Concept
+# Core Concept
 1. The DAG ledger structure of Vite
 2. The snapshot chain of Vite
 
 
-### The DAG Ledger Structure of Vite
+## The DAG Ledger Structure of Vite
 
 ![Alt text](/images/pasted-viteshan-15.png)
 Vite's design made a trade-off between two aspects, reduction of false fork ratio and tamper resistance.
@@ -42,7 +41,7 @@ The entire history of transactions among accounts is represented by a directed a
 
 
 
-### The Snapshot Chain Structure of Vite
+## The Snapshot Chain Structure of Vite
 The DAG chain, which is composed of account blocks, can explicitly describe the change of world status. However, the frequency of transactions for a given account affects the length of the relevant chain, and an account chain with infrequent transactions is easy to be tampered with.
 
 To solve this problem,  Vite introduces snapshot chain that grows continuously, thereby increasing the tamper-resistant level of the block-lattice structure.
@@ -100,14 +99,12 @@ AccountStateBlockChain is a map data structure, key is the address of each accou
 ## Transaction Process
 ### Send Transaction
 
-
+![upload successful](/images/pasted-viteshan-23.png)
 The core code of the send transaction is as shown above:
 
 1. Construct a transaction and sign the transaction
 2. Pack the account status block and sign the packaged account status block
 3. Insert the account status block into the account chain and broadcast the block results
-
-![upload successful](/images/pasted-viteshan-23.png)
 
 
 ### Receive Transaction
