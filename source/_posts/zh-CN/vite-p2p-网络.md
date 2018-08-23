@@ -128,19 +128,3 @@ Vite 的底层 P2P 网络采用的是相对主流的方案，在此之上构建�
 欢迎大家参观我们的[代码](https://github.com/vitelabs/go-vite)，也请关注我们的后续文章，谢谢支持。
 
 
----
-
-Our official website: https://www.vite.org/
-
-**Telegram:**
-
-* English: https://t.me/vite_en
-* Chinese: https://t.me/vite_cn
-* Russian: https://t.me/vite_russia
-* Korean: https://t.me/vite_korean
-* Vietnamese: https://t.me/vite_vietnamese
-* Thai: https://t.me/vite_thailand
-
-**Twitter:** https://twitter.com/vitelabs
-
-**Discord:** https://discordapp.com/invite/CsVY76q

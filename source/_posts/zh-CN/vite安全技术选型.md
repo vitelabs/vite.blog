@@ -81,19 +81,4 @@ ECDSA(Elliptic Curve Digital Signature Algorithm)是使用椭圆曲线的数字�
 
 * AES-256-GCM 256位密钥的拥有对消息的加密和完整性校验对称加密算法
 
----
 
-Our official website: https://www.vite.org/
-
-**Telegram:**
-
-* English: https://t.me/vite_en
-* Chinese: https://t.me/vite_cn
-* Russian: https://t.me/vite_russia
-* Korean: https://t.me/vite_korean
-* Vietnamese: https://t.me/vite_vietnamese
-* Thai: https://t.me/vite_thailand
-
-**Twitter:** https://twitter.com/vitelabs
-
-**Discord:** https://discordapp.com/invite/CsVY76q

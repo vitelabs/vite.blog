@@ -125,19 +125,3 @@ This strategy guarantees that nodes are updated in time. The more active the nod
 
 Vite has chosen a proven P2P network solution, where Vite communication protocols such as transactions, block broadcasting and node synchronization are built.
 
----
-
-Our official website: https://www.vite.org/
-
-**Telegram:**
-
-* English: https://t.me/vite_en
-* Chinese: https://t.me/vite_cn
-* Russian: https://t.me/vite_russia
-* Korean: https://t.me/vite_korean
-* Vietnamese: https://t.me/vite_vietnamese
-* Thai: https://t.me/vite_thailand
-
-**Twitter:** https://twitter.com/vitelabs
-
-**Discord:** https://discordapp.com/invite/CsVY76q
