@@ -17,6 +17,8 @@ menu_settings:
   icons: true
   badges: false
 
+# Baidu Analytics ID
+baidu_analytics: 19f189ffcd7c9d3f58c2773af190b087
 
 social:
   Website: http://vite.org/
