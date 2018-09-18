@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en,zh-CN,zh-HK">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="TFFddVIg_vEByGvDAQepGaiVHv8bTyugfg_TTtu8pbQ" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/icon.png?v=6.3.0" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      appId: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简介从白皮书了解到，vite的核心账本结构是DAG，DAG中存储了每个用户的每笔交易信息。为了提高整个DAG账本的数据安全性，vite首创提出了快照链，使用快照链进一步保障DAG的不可篡改性。白皮书描述的账本结构比较抽象，本文通过简单的500行代码来实现vite中DAG的账本结构以及快照链。">
+<meta name="keywords" content="Vite, DAG, Bitcoin, Blockchain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="500行代码了解vite基本设计">
+<meta property="og:url" content="http://vite.blog/zh-CN/2018/08/21/500行代码了解vite基本设计/index.html">
+<meta property="og:site_name" content="Vite Labs">
+<meta property="og:description" content="简介从白皮书了解到，vite的核心账本结构是DAG，DAG中存储了每个用户的每笔交易信息。为了提高整个DAG账本的数据安全性，vite首创提出了快照链，使用快照链进一步保障DAG的不可篡改性。白皮书描述的账本结构比较抽象，本文通过简单的500行代码来实现vite中DAG的账本结构以及快照链。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-15.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-16.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-17.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-18.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-19.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-20.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-21.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-22.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-23.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-24.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-25.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-viteshan-26.png">
+<meta property="og:updated_time" content="2018-09-18T08:02:12.134Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="500行代码了解vite基本设计">
+<meta name="twitter:description" content="简介从白皮书了解到，vite的核心账本结构是DAG，DAG中存储了每个用户的每笔交易信息。为了提高整个DAG账本的数据安全性，vite首创提出了快照链，使用快照链进一步保障DAG的不可篡改性。白皮书描述的账本结构比较抽象，本文通过简单的500行代码来实现vite中DAG的账本结构以及快照链。">
+<meta name="twitter:image" content="http://vite.blog/images/pasted-viteshan-15.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://vite.blog/zh-CN/2018/08/21/500行代码了解vite基本设计/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>500行代码了解vite基本设计 | Vite Labs</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120867177-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-120867177-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?19f189ffcd7c9d3f58c2773af190b087";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    
+          <div class="custom-logo-site-title">
+                <a href="/" class="brand" rel="start">
+                  <span class="logo-line-before"><i></i></span>
+                  <span class="site-title">Vite Labs</span>
+                  <span class="logo-line-after"><i></i></span>
+                </a>
+          </div>
+    
+
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Let's create something cool</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/zh-CN/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/zh-CN/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/zh-CN/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/zh-CN/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+
+      <li class="menu-item menu-item-lang">
+            <a href="javascript:;"><i class="menu-item-icon fa fa-fw fa-globe"></i>
+            <br />
+            <span>简体中文</span></a>
+
+            <select id="lang-select" onchange="changeLang()">
+               
+                        <option value="en"
+                        
+                        >English</option>
+               
+                        <option value="zh-CN"
+                        
+                             selected = "selected"
+                        
+                        >简体中文</option>
+               
+            </select>
+      </li>
+
+      <script>
+               function changeLang() {
+                    var lang = document.getElementById("lang-select").value;
+                    window.location = "/" + lang + "/";
+               }
+      </script>
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vite.blog/zh-CN/2018/08/21/500行代码了解vite基本设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vite Labs">
+      <meta itemprop="description" content="Vite - A Next Generation High-performance Decentralized Application Platform">
+      <meta itemprop="image" content="/uploads/logo_appstore.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vite Labs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">500行代码了解vite基本设计<a href="https://github.com/vitelabs/vite.blog/edit/master/source/_posts/zh-CN/500行代码了解vite基本设计.md" class="post-edit-link" title="编辑" target="_blank">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-21 13:18:15" itemprop="dateCreated datePublished" datetime="2018-08-21T13:18:15+00:00">2018-08-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-18 08:02:12" itemprop="dateModified" datetime="2018-09-18T08:02:12+00:00">2018-09-18</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/zh-CN/2018/08/21/500行代码了解vite基本设计/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="zh-CN/2018/08/21/500行代码了解vite基本设计/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>从白皮书了解到，vite的核心账本结构是DAG，DAG中存储了每个用户的每笔交易信息。<br>为了提高整个DAG账本的数据安全性，vite首创提出了快照链，使用快照链进一步保障DAG的不可篡改性。<br>白皮书描述的账本结构比较抽象，本文通过简单的500行代码来实现vite中DAG的账本结构以及快照链。<br><a id="more"></a></p>
+<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><ol>
+<li>vite中DAG账本结构；</li>
+<li>vite中快照链；</li>
+</ol>
+<h2 id="vite中DAG账本结构"><a href="#vite中DAG账本结构" class="headerlink" title="vite中DAG账本结构"></a>vite中DAG账本结构</h2><p><img src="/images/pasted-viteshan-15.png" alt="Alt text"><br>vite在设计账本结构的时候，从降低伪分叉率和防篡改(vite白皮书中有详细解释定义)这两个角度做了一次权衡，上图是vite白皮书中描述的几种的区块链账本结构在伪分叉和防篡改两个方面的表现。</p>
+<p>vite选择了block-lattice的DAG，下面来主要描述一下block-lattice的DAG结构。</p>
+<p><img src="/images/pasted-viteshan-16.png" alt="upload successful"></p>
+<p>上图中，世界状态用S表示，S1中有三个初始的账户A、B、C，三个账户状态分别是A0、B0、C0，实线箭头方向表示这个相同账户的上一个账户状态，虚线箭头表示不同账户状态间的间接影响(如转账)，假设初始状态账户余额都是100元，</p>
+<ol>
+<li>初始世界状态：S1={A0=100, B0=100, C0=100}</li>
+<li>账户B向账户A转账20元之后，世界状态：S2={A1=120, B1=80, C0=100}</li>
+<li>账户A向账户C转账30元之后，世界状态：S3={A2=90, B1=80, C1=130}<br>在vite中，每一个账户状态就是一个区块(如图中A0、A1等)，区块之间的引用关系(即图中箭头)即账户间转账过程。</li>
+</ol>
+<p>所有账户转账的历史流水，构成了一张有向无环图(DAG)，这就是vite的DAG账本结构。</p>
+<h2 id="vite中快照链结构"><a href="#vite中快照链结构" class="headerlink" title="vite中快照链结构"></a>vite中快照链结构</h2><p>由账户区块组成的DAG链，能够清晰的描述世界状态的变化。但是，由于每个账户链条长度与交易频率相关，这就导致了交易频率不够高的账户链条比较容易被篡改。</p>
+<p>为了解决这个问题，vite中引入了快照链结构，通过快照链的不断增长来加大单纯账户链的防篡改度。</p>
+<p><img src="/images/pasted-viteshan-17.png" alt="upload successful"></p>
+<p>上图中，描述了账户S1、S2、S3的世界状态，箭头的方向标识的是该状态的上一个状态。</p>
+<p>其实这就是快照链，快照链中的每一个区块都能表示一个世界状态(所有账户状态的集合)，同时每一个区块都引用上一个区块。</p>
+<p>当然，为了简化存储，vite的实际规范中，每个区块描述的是从上一个区块到这个区块变动的账户状态集合，如下图所示。而且区块的生成是固定频率，而不是每笔交易都去生成一个snapshot区块。</p>
+<p><img src="/images/pasted-viteshan-18.png" alt="upload successful"></p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>上面简单介绍了vite中DAG账本和snapshot链结构，下面会通过代码简单实现这两个数据结构，并简单实现转账过程和snapshot链生成过程。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>账本间的转账是通过交易进行的，下面定义了交易的数据结构：</p>
+<p><img src="/images/pasted-viteshan-19.png" alt="upload successful"></p>
+<p>TxType共有两个类型，分别代表着发送交易和接收交易，与vite白皮书中一次转账会生成两个交易相对应。</p>
+<p>账本账户状态的数据结构如下，可以看到，账户状态引用了交易数据tx，这个表示了每次账户状态变化都是由一个交易引起的。</p>
+<p>发送账户会引用TxType为send的交易，接收账户会引用TxType为received的交易。</p>
+<p><img src="/images/pasted-viteshan-20.png" alt="upload successful"></p>
+<p>账户状态会定期被快照链快照，snapshot block定义如下，Height代表snapshot block的高度，每次增加1，AccountsHash代表所有被缓存账户状态的hash。</p>
+<p><img src="/images/pasted-viteshan-21.png" alt="upload successful"></p>
+<p>以上介绍的是组成vite的基本数据结构，下文的转账交易和snapshotblock生成都是在这几个数据结构上进行操作。</p>
+<p><img src="/images/pasted-viteshan-22.png" alt="upload successful"></p>
+<p>这两个数据结构分别代表着vite账户链和快照链。</p>
+<p>accoutStateBlockChain是一个map数据结构，key为每个账户的地址，value是一个AccountStateBlock链表，通过PreHash指向上一个block；</p>
+<p>snapshotBlock是一个SnapshotBlock链表，也是通过PreHash指向上一个block；</p>
+<h2 id="转账过程"><a href="#转账过程" class="headerlink" title="转账过程"></a>转账过程</h2><h3 id="发送交易"><a href="#发送交易" class="headerlink" title="发送交易"></a>发送交易</h3><p><img src="/images/pasted-viteshan-23.png" alt="upload successful"><br>发送交易的核心代码如上图：</p>
+<ol>
+<li>构造发送交易，并对发送交易进行签名；</li>
+<li>打包账户状态块，并对打包的账户状态块进行签名；</li>
+<li>将账户状态块插入到账户链上，并将该区块结果进行广播；</li>
+</ol>
+<h3 id="接收交易"><a href="#接收交易" class="headerlink" title="接收交易"></a>接收交易</h3><p><img src="/images/pasted-viteshan-24.png" alt="upload successful"><br>会有一个协程等待广播事件产生，并验证block合法性，同时如果需要生成对应的received交易，将会将tx转发到对应的节点。</p>
+<p><img src="/images/pasted-viteshan-25.png" alt="upload successful"></p>
+<p>对应节点收到send交易之后，验证ok之后：</p>
+<ol>
+<li>生成received的交易，并对交易进行签名；</li>
+<li>打包账户状态块，并对打包的账户状态块进行签名；</li>
+<li>将账户状态块插入到账户链中，并将该区块结构进行广播；</li>
+</ol>
+<h2 id="快照链快照过程"><a href="#快照链快照过程" class="headerlink" title="快照链快照过程"></a>快照链快照过程</h2><p><img src="/images/pasted-viteshan-26.png" alt="upload successful"><br>挖矿账户会定期进行快照块的生成，并将快照块插入到snapshot链中。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文的主要目的是简单介绍naive-vite的主要流程，同时通过这个简单的demo来让大家了解vite的基本原理。</p>
+<p>如果大家想了解更多细节，欢迎关注<a href="http://vite.org/" target="_blank" rel="noopener">vite官网</a>和<a href="https://vite.blog/">vite博客</a>，同时欢迎watch <a href="https://github.com/vitelabs/go-vite" target="_blank" rel="noopener">vite的第一版官方实现</a>。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://www.vite.org/whitepaper/vite_cn.pdf" target="_blank" rel="noopener">vite白皮书</a></li>
+<li><a href="https://github.com/viteshan/naive-vite" target="_blank" rel="noopener">vite-naive源码</a></li>
+<li><a href="https://github.com/mycoralhealth/blockchain-tutorial" target="_blank" rel="noopener">Block-tutorial</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <hr/>
+<div id="post_footer" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%;">
+<p><strong>Our official website:</strong> <a href="https://www.vite.org/" target="_blank" rel="noopener">https://www.vite.org/</a></p>
+<p><strong>Telegram:</strong></p>
+<ul>
+<li>English: <a href="https://t.me/vite_en" target="_blank" rel="noopener">https://t.me/vite_en</a></li>
+<li>Chinese: <a href="https://t.me/vite_cn" target="_blank" rel="noopener">https://t.me/vite_cn</a></li>
+<li>Russian: <a href="https://t.me/vite_russia" target="_blank" rel="noopener">https://t.me/vite_russia</a></li>
+<li>Korean: <a href="https://t.me/vite_korean" target="_blank" rel="noopener">https://t.me/vite_korean</a></li>
+<li>Vietnamese: <a href="https://t.me/vite_vietnamese" target="_blank" rel="noopener">https://t.me/vite_vietnamese</a></li>
+<li>Thai: <a href="https://t.me/vite_thailand" target="_blank" rel="noopener">https://t.me/vite_thailand</a></li>
+</ul>
+<p><strong>Twitter:</strong> <a href="https://twitter.com/vitelabs" target="_blank" rel="noopener">https://twitter.com/vitelabs</a></p>
+<p><strong>Discord:</strong> <a href="https://discordapp.com/invite/CsVY76q" target="_blank" rel="noopener">https://discordapp.com/invite/CsVY76q</a></p>
+</div>
+<hr/>
+
+      </div>
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/vitelabs_wechat.jpg" alt="Vite Labs wechat" style="width: 200px; max-width: 100%;"/>
+    <div>You can follow our wechat to get more info about vite.</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Vite Labs</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://vite.blog/zh-CN/2018/08/21/500行代码了解vite基本设计/" title="500行代码了解vite基本设计">http://vite.blog/zh-CN/2018/08/21/500行代码了解vite基本设计/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/en/2018/08/16/Vite-in-a-nutshell/" rel="next" title="Vite in a nutshell">
+                <i class="fa fa-chevron-left"></i> Vite in a nutshell
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/zh-CN/2018/08/21/vite-p2p-网络/" rel="prev" title="vite p2p 网络">
+                vite p2p 网络 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<div class="addthis_inline_share_toolbox">
+  <script type = "text/javascript" src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5b21d5d41d053c18" async = "async" ></script>
+</div>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo_appstore.png"
+                alt="Vite Labs" />
+            
+              <p class="site-author-name" itemprop="name">Vite Labs</p>
+              <p class="site-description motion-element" itemprop="description">Vite - A Next Generation High-performance Decentralized Application Platform</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://vite.org/" target="_blank" title="Website" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Website</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vitelabs" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://bitcointalk.org/index.php?topic=4438416" target="_blank" title="Bitcointalk" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Bitcointalk</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/vitelabs" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_en" target="_blank" title="English" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>English</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_zh" target="_blank" title="Chinese" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Chinese</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_ann" target="_blank" title="Announcement" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Announcement</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.reddit.com/r/vitelabs" target="_blank" title="Reddit" rel="external nofollow"><i class="fa fa-fw fa-reddit"></i>Reddit</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://discordapp.com/invite/CsVY76q" target="_blank" title="Discord" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Discord</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#核心概念"><span class="nav-number">2.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#vite中DAG账本结构"><span class="nav-number">2.1.</span> <span class="nav-text">vite中DAG账本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vite中快照链结构"><span class="nav-number">2.2.</span> <span class="nav-text">vite中快照链结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构"><span class="nav-number">3.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转账过程"><span class="nav-number">3.2.</span> <span class="nav-text">转账过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#发送交易"><span class="nav-number">3.2.1.</span> <span class="nav-text">发送交易</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接收交易"><span class="nav-number">3.2.2.</span> <span class="nav-text">接收交易</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快照链快照过程"><span class="nav-number">3.3.</span> <span class="nav-text">快照链快照过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vite Labs</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a target="_blank" href="https://vite.org"><b>Let's create something cool!</b></a></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-reading-progress@1.1/reading_progress.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://vitelabs.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://vite.blog/zh-CN/2018/08/21/500行代码了解vite基本设计/';
+        this.page.identifier = 'zh-CN/2018/08/21/500行代码了解vite基本设计/';
+        this.page.title = '500行代码了解vite基本设计';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://vitelabs.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              var scrollTop = document.documentElement.scrollTop;
+              if (scrollTop >= offsetTop) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.min.css">
+
+  
+  
+    
+  
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Twitter,Facebook,GooglePlus,Reddit,Tumblr,GoogleBookmarks,Weibo,Pinterest,Wechat";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en,zh-CN,zh-HK">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="TFFddVIg_vEByGvDAQepGaiVHv8bTyugfg_TTtu8pbQ" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/icon.png?v=6.3.0" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      appId: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="序言Ethereum的账本结构是一个单链结构(Block List)，是区块链最开始的数据结构，现在也衍生出一些其他数据结构，比如DAG（Directed acyclic graph）。在Ethereum中，需要通过“挖矿”产出一个block，“挖”一个block的权利是每个节点通过PoW机制公平竞争得到。每个block包含的数据可以参看Ethereum的黄皮书，这些数据里包含交易列表。交易列表在">
+<meta name="keywords" content="Vite, DAG, Bitcoin, Blockchain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅析MPT在Ethereum中的应用">
+<meta property="og:url" content="http://vite.blog/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/index.html">
+<meta property="og:site_name" content="Vite Labs">
+<meta property="og:description" content="序言Ethereum的账本结构是一个单链结构(Block List)，是区块链最开始的数据结构，现在也衍生出一些其他数据结构，比如DAG（Directed acyclic graph）。在Ethereum中，需要通过“挖矿”产出一个block，“挖”一个block的权利是每个节点通过PoW机制公平竞争得到。每个block包含的数据可以参看Ethereum的黄皮书，这些数据里包含交易列表。交易列表在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://vite.blog/images/pasted-lyd00-15.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-lyd00-15.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-lyd00-16.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-lyd00-17.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-lyd00-18.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-lyd00-20.png">
+<meta property="og:updated_time" content="2018-09-18T08:02:12.134Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅析MPT在Ethereum中的应用">
+<meta name="twitter:description" content="序言Ethereum的账本结构是一个单链结构(Block List)，是区块链最开始的数据结构，现在也衍生出一些其他数据结构，比如DAG（Directed acyclic graph）。在Ethereum中，需要通过“挖矿”产出一个block，“挖”一个block的权利是每个节点通过PoW机制公平竞争得到。每个block包含的数据可以参看Ethereum的黄皮书，这些数据里包含交易列表。交易列表在">
+<meta name="twitter:image" content="http://vite.blog/images/pasted-lyd00-15.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://vite.blog/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>浅析MPT在Ethereum中的应用 | Vite Labs</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120867177-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-120867177-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?19f189ffcd7c9d3f58c2773af190b087";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    
+          <div class="custom-logo-site-title">
+                <a href="/" class="brand" rel="start">
+                  <span class="logo-line-before"><i></i></span>
+                  <span class="site-title">Vite Labs</span>
+                  <span class="logo-line-after"><i></i></span>
+                </a>
+          </div>
+    
+
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Let's create something cool</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/zh-CN/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/zh-CN/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/zh-CN/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/zh-CN/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+
+      <li class="menu-item menu-item-lang">
+            <a href="javascript:;"><i class="menu-item-icon fa fa-fw fa-globe"></i>
+            <br />
+            <span>简体中文</span></a>
+
+            <select id="lang-select" onchange="changeLang()">
+               
+                        <option value="en"
+                        
+                        >English</option>
+               
+                        <option value="zh-CN"
+                        
+                             selected = "selected"
+                        
+                        >简体中文</option>
+               
+            </select>
+      </li>
+
+      <script>
+               function changeLang() {
+                    var lang = document.getElementById("lang-select").value;
+                    window.location = "/" + lang + "/";
+               }
+      </script>
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vite.blog/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vite Labs">
+      <meta itemprop="description" content="Vite - A Next Generation High-performance Decentralized Application Platform">
+      <meta itemprop="image" content="/uploads/logo_appstore.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vite Labs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">浅析MPT在Ethereum中的应用<a href="https://github.com/vitelabs/vite.blog/edit/master/source/_posts/zh-CN/浅析MPT在Ethereum中的应用.md" class="post-edit-link" title="编辑" target="_blank">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-21 17:59:08" itemprop="dateCreated datePublished" datetime="2018-08-21T17:59:08+00:00">2018-08-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-18 08:02:12" itemprop="dateModified" datetime="2018-09-18T08:02:12+00:00">2018-09-18</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>Ethereum的账本结构是一个单链结构(Block List)，是区块链最开始的数据结构，现在也衍生出一些其他数据结构，比如DAG（Directed acyclic graph）。在Ethereum中，需要通过“挖矿”产出一个block，“挖”一个block的权利是每个节点通过PoW机制公平竞争得到。每个block包含的数据可以参看Ethereum的黄皮书，这些数据里包含交易列表。交易列表在Ethereum中通过MPT（Merkle Patricia Tree）这种数据结构来表示的。MPT由Trie Tree和Merkle Tree演化过来，因此同时具备Trie Tree和Merkle Tree的特点。<br><a id="more"></a></p>
+<h1 id="Trie-Tree"><a href="#Trie-Tree" class="headerlink" title="Trie Tree"></a>Trie Tree</h1><p>为了更好地了解MPT，我们先来了解一下Trie Tree，Trie Tree是一种字典树，下图就是一个Trie Tree结构：<br><img src="/images/pasted-lyd00-15.png" alt="upload successful"></p>
+<p>Trie Tree非常简单且易于理解。上图中的Trie Tree表示[“AOT”、”BR”、”DCA”、”DCB”]这个字符串集合，从根节点到叶子节点的路径表示字符串集合中的一个元素，如最左边那条路径就表示”AOT”。Trie Tree用来组织key-value数据也是很好的。key是字符串，用根节点到叶子节点的路径表示，value放在叶子节点里，或者在叶子节点里通过指针指向value。通过key搜寻value是常数级的时间复杂度。</p>
+<h1 id="Patricia-Tree"><a href="#Patricia-Tree" class="headerlink" title="Patricia Tree"></a>Patricia Tree</h1><p>在Ethereum中，为了节省空间，实际上使用的是优化过的Trie Tree，即Patricia Trie（压缩前缀树），如下图所示:</p>
+<p><img src="/images/pasted-lyd00-15.png" alt="filename already exists, renamed"></p>
+<p>Patricia Trie在Trie Tree基础上，对于只有单个子节点的父节点，将其与子节点进行了合并，优点是更加节省空间，缺点是在进行插入操作的时候比Trie Tree稍微复杂一些，在某种情况下需要做节点的分割，如在上面的树结构中插入一个字符串”AOB”，那么“AOT”这个节点就要被拆分成“AO”和“T”两个节点，树结构就要变成的下面的样子:<br><img src="/images/pasted-lyd00-16.png" alt="filename already exists, renamed"></p>
+<p>Patricia Trie会比Trie Tree更省空间一些。</p>
+<h1 id="Merkle-Tree"><a href="#Merkle-Tree" class="headerlink" title="Merkle Tree"></a>Merkle Tree</h1><p>另一个数据结构是Merkle Tree（默克尔树），Merkle Tree也是区块链中一个十分重要的数据结构，如在SPV（Simplified Payment Verification）中就有所应用。下面也简单介绍下Merkle Tree，Merkle Tree的树结构大致如下：<br><img src="/images/pasted-lyd00-17.png" alt="filename already exists, renamed"></p>
+<p>Merkle Tree也叫哈希树，是一种二叉树。树中每个节点存储的是Hash值，叶子节点引用数据集合中真正的数据，如上图表示的数据集[A、B、C、D]。叶子节点的Hash值是由数据通过哈希函数计算得到，父节点的Hash值是由其两个子节点的Hash值做字符串拼接再通过哈希函数计算得到，最后递归可计算出树跟节点的Hash值。Merkle Tree的特点是，一旦某个叶子节点的数据发生了变更，根Hash就会发现变化。</p>
+<p>在根Hash值可信的情况下，想要验证某个数据是否可信，只需要拿到这个数据所在叶子节点到根节点路径上的相邻Hash值即可，如下图：<br><img src="/images/pasted-lyd00-18.png" alt="filename already exists, renamed"></p>
+<p>假设从可信源拿到H7（根Hash），从不可信源拿到数据B、H1、H6之后，就可以验证B的正确性。先通过Hash(H1+Hash(B))得到H5，再通过H7 == Hash(H5 + H6)判断数据B是否可信。因为哈希函数特性是数据的一点变更，就会导致生成Hash值的不可预知的大幅度变化，所以想要同时伪造B、H1、H6来最终计算得出H7是十分困难的，所以在H7可信的情况下，可以验证从不可信数据源取得B、H1、H6的正确性。这种验证正确性的问题属于零知识证明的范畴。</p>
+<h1 id="Merkle-Patricia-Tree"><a href="#Merkle-Patricia-Tree" class="headerlink" title="Merkle Patricia Tree"></a>Merkle Patricia Tree</h1><p>Patricia Trie具备结构简单、易搜索的优点，Merkle Tree具备零知识证明的能力，MPT由Patricia Trie和Merkle Tree优化而来，同时具备这两者的特点。下图是一个MPT结构:</p>
+<p><img src="/images/pasted-lyd00-20.png" alt="filename already exists, renamed"></p>
+<p>MPT本质上是一颗Patricia Trie，比较便于存储Key-Value数据集。同时又具备Merkle Tree的能力，MPT也可以递归计算得到根hash，任意一个节点的内容变化都会导致根hash发生变化。<br>在MPT中，把节点分为3类，分别是叶子节点（Leaf Node），分支节点(Branch Node)，拓展节点(Extension Node)。这三类节点有各自的作用，叶子节点存储真正的value或指向value的指针。分支节点具备路由功能，上图中分支节点有[0…f]共16个字符，不同字符对应一个指针，分别引用不同的子节点，在进行key搜索时，可以快速找到正确的子树并搜索下去。拓展节点是一种省空间的路由类节点，将只有一个子节点的父节点和其子节点合并，就可得到拓展节点，例如，ADGHJ这个Key，需要4个分支节点 + 1个叶子节点，其中A、D、G、H为4个分支节点，但是有拓展节点之后，可以将ADGH合并成一个拓展节点，变成了1个拓展节点 + 1个叶子节点，从而节省了空间。<br>在MPT树中如何计算根Hash值呢，看了Ethereum的源码之后发现过程和Merkle Tree非常类似。需要对树进行深度遍历，当遇到叶子节点是对其数据进行哈希计算得到Hash值。哈希计算过程是，先将叶子节点的数据对象序列化成二进制数组，对二进制数组进行哈希。分支节点的哈希计算过程是将其指向子节点的指针替换成子节点的Hash值，然后序列化成二进制数组，在进行哈希。拓展节点和分支节点计算Hash值的过程是一样的，将指向子节点的指针替换成子节点的Hash值，再序列化成二进制数组，然后进行哈希。深度遍历完成之后，可得到每个节点的Hash值(包括根Hash值）。当树中某个节点内容发生变化之后，不需要重新深度遍历所有节点来计算根Hash值，只需要重新计算这个节点到根节点的路径中的每个节点及其相邻节点Hash值即可，大家可以思考一下这个过程。</p>
+<p>那么MPT能够有哪些应用呢，在Ethereum中，交易列表、收据列表、世界状态、合约数据是通过MPT来组织的，简而言之，Key-Value数据基本都是通过MPT来组织。<br>拿世界状态来说，世界状态在数据结构层面是一个key-value集合，key是账号地址，value是一个四元组即[nonce(交易数量)、balance（余额）、storageRoot（存储内容根Hash）、codeHash(代码Hash)]，每个字段具体的含义和作用可以去看Ethereum黄皮书。Ethereum的世界状态保存着这一刻全网所有账号的状态消息，某些账号的状态随交易发生或合约程序的执行会发生变化，利用MPT每次状态变化只需要少量计算即可得到新的根Hash值，并且有可信根Hash值之后，可以从不可信源获取某个账号的状态信息，并快速验证其真实性。MPT本质上也是一颗PT，因而给定一个账号地址，可快速搜索到这个账号的信息。<br>正是因为有了MPT，Ethereum在区块头中可以只存储交易列表根Hash、收据列表根Hash、世界状态根Hash、合约数据根Hash，将数据的详细信息可以和区块头分开存储及传输，这个技术可以用来做轻节点。<br>MPT在存储Key-Value数据集有其独特的优势，易搜索、易增量计算根Hash、支持零知识证明等。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <hr/>
+<div id="post_footer" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%;">
+<p><strong>Our official website:</strong> <a href="https://www.vite.org/" target="_blank" rel="noopener">https://www.vite.org/</a></p>
+<p><strong>Telegram:</strong></p>
+<ul>
+<li>English: <a href="https://t.me/vite_en" target="_blank" rel="noopener">https://t.me/vite_en</a></li>
+<li>Chinese: <a href="https://t.me/vite_cn" target="_blank" rel="noopener">https://t.me/vite_cn</a></li>
+<li>Russian: <a href="https://t.me/vite_russia" target="_blank" rel="noopener">https://t.me/vite_russia</a></li>
+<li>Korean: <a href="https://t.me/vite_korean" target="_blank" rel="noopener">https://t.me/vite_korean</a></li>
+<li>Vietnamese: <a href="https://t.me/vite_vietnamese" target="_blank" rel="noopener">https://t.me/vite_vietnamese</a></li>
+<li>Thai: <a href="https://t.me/vite_thailand" target="_blank" rel="noopener">https://t.me/vite_thailand</a></li>
+</ul>
+<p><strong>Twitter:</strong> <a href="https://twitter.com/vitelabs" target="_blank" rel="noopener">https://twitter.com/vitelabs</a></p>
+<p><strong>Discord:</strong> <a href="https://discordapp.com/invite/CsVY76q" target="_blank" rel="noopener">https://discordapp.com/invite/CsVY76q</a></p>
+</div>
+<hr/>
+
+      </div>
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/vitelabs_wechat.jpg" alt="Vite Labs wechat" style="width: 200px; max-width: 100%;"/>
+    <div>You can follow our wechat to get more info about vite.</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Vite Labs</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://vite.blog/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/" title="浅析MPT在Ethereum中的应用">http://vite.blog/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/zh-CN/2018/08/21/vite-p2p-网络/" rel="next" title="vite p2p 网络">
+                <i class="fa fa-chevron-left"></i> vite p2p 网络
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/en/2018/08/21/A-brief-analysis-of-MPT-and-its-application-in-Ethereum/" rel="prev" title="A brief analysis of MPT and its application in Ethereum">
+                A brief analysis of MPT and its application in Ethereum <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<div class="addthis_inline_share_toolbox">
+  <script type = "text/javascript" src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5b21d5d41d053c18" async = "async" ></script>
+</div>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo_appstore.png"
+                alt="Vite Labs" />
+            
+              <p class="site-author-name" itemprop="name">Vite Labs</p>
+              <p class="site-description motion-element" itemprop="description">Vite - A Next Generation High-performance Decentralized Application Platform</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://vite.org/" target="_blank" title="Website" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Website</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vitelabs" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://bitcointalk.org/index.php?topic=4438416" target="_blank" title="Bitcointalk" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Bitcointalk</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/vitelabs" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_en" target="_blank" title="English" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>English</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_zh" target="_blank" title="Chinese" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Chinese</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_ann" target="_blank" title="Announcement" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Announcement</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.reddit.com/r/vitelabs" target="_blank" title="Reddit" rel="external nofollow"><i class="fa fa-fw fa-reddit"></i>Reddit</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://discordapp.com/invite/CsVY76q" target="_blank" title="Discord" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Discord</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Trie-Tree"><span class="nav-number">2.</span> <span class="nav-text">Trie Tree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Patricia-Tree"><span class="nav-number">3.</span> <span class="nav-text">Patricia Tree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Merkle-Tree"><span class="nav-number">4.</span> <span class="nav-text">Merkle Tree</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Merkle-Patricia-Tree"><span class="nav-number">5.</span> <span class="nav-text">Merkle Patricia Tree</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vite Labs</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a target="_blank" href="https://vite.org"><b>Let's create something cool!</b></a></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-reading-progress@1.1/reading_progress.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://vitelabs.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://vite.blog/zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/';
+        this.page.identifier = 'zh-CN/2018/08/21/浅析MPT在Ethereum中的应用/';
+        this.page.title = '浅析MPT在Ethereum中的应用';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://vitelabs.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              var scrollTop = document.documentElement.scrollTop;
+              if (scrollTop >= offsetTop) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.min.css">
+
+  
+  
+    
+  
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Twitter,Facebook,GooglePlus,Reddit,Tumblr,GoogleBookmarks,Weibo,Pinterest,Wechat";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

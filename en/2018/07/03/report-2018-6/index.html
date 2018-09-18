@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en,zh-CN,zh-HK">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="TFFddVIg_vEByGvDAQepGaiVHv8bTyugfg_TTtu8pbQ" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/icon.png?v=6.3.0" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      appId: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="In the last month, we made substantive progress in a few fronts: We continued system development, which was bolstered by additional key engineering hires. We also completed the release of the first ba">
+<meta name="keywords" content="Report">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vite Update — June 2018">
+<meta property="og:url" content="http://vite.blog/en/2018/07/03/report-2018-6/index.html">
+<meta property="og:site_name" content="Vite Labs">
+<meta property="og:description" content="In the last month, we made substantive progress in a few fronts: We continued system development, which was bolstered by additional key engineering hires. We also completed the release of the first ba">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://vite.blog/images/pasted-0.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-1.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-2.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-3.png">
+<meta property="og:image" content="http://vite.blog/images/pasted-4.png">
+<meta property="og:updated_time" content="2018-09-18T08:02:12.134Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vite Update — June 2018">
+<meta name="twitter:description" content="In the last month, we made substantive progress in a few fronts: We continued system development, which was bolstered by additional key engineering hires. We also completed the release of the first ba">
+<meta name="twitter:image" content="http://vite.blog/images/pasted-0.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://vite.blog/en/2018/07/03/report-2018-6/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Vite Update — June 2018 | Vite Labs</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120867177-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-120867177-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?19f189ffcd7c9d3f58c2773af190b087";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    
+          <div class="custom-logo-site-title">
+                <a href="/" class="brand" rel="start">
+                  <span class="logo-line-before"><i></i></span>
+                  <span class="site-title">Vite Labs</span>
+                  <span class="logo-line-after"><i></i></span>
+                </a>
+          </div>
+    
+
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Let's create something cool</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />Search</a>
+        </li>
+      
+
+      <li class="menu-item menu-item-lang">
+            <a href="javascript:;"><i class="menu-item-icon fa fa-fw fa-globe"></i>
+            <br />
+            <span>English</span></a>
+
+            <select id="lang-select" onchange="changeLang()">
+               
+                        <option value="en"
+                        
+                             selected = "selected"
+                        
+                        >English</option>
+               
+                        <option value="zh-CN"
+                        
+                        >简体中文</option>
+               
+            </select>
+      </li>
+
+      <script>
+               function changeLang() {
+                    var lang = document.getElementById("lang-select").value;
+                    window.location = "/" + lang + "/";
+               }
+      </script>
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vite.blog/en/2018/07/03/report-2018-6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vite Labs">
+      <meta itemprop="description" content="Vite - A Next Generation High-performance Decentralized Application Platform">
+      <meta itemprop="image" content="/uploads/logo_appstore.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vite Labs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Vite Update — June 2018<a href="https://github.com/vitelabs/vite.blog/edit/master/source/_posts/en/report-2018-6.md" class="post-edit-link" title="Edit this post" target="_blank">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-03 15:24:00" itemprop="dateCreated datePublished" datetime="2018-07-03T15:24:00+00:00">2018-07-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-18 08:02:12" itemprop="dateModified" datetime="2018-09-18T08:02:12+00:00">2018-09-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Monthly-Report/" itemprop="url" rel="index"><span itemprop="name">Monthly Report</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/en/2018/07/03/report-2018-6/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="en/2018/07/03/report-2018-6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/pasted-0.png" alt="upload successful"><br>In the last month, we made substantive progress in a few fronts: We continued system development, which was bolstered by additional key engineering hires. We also completed the release of the first batch of Vite tokens and reached a number of milestones in community development and business development.</p>
+<a id="more"></a>
+<h2 id="Software-Development"><a href="#Software-Development" class="headerlink" title="Software Development"></a>Software Development</h2><ul>
+<li>We began developing Vite Core and made it open-source: <a href="https://github.com/vitelabs/go-vite" target="_blank" rel="noopener">https://github.com/vitelabs/go-vite</a></li>
+<li>We completed the design for the signature algorithm and hash algorithms: <a href="https://doc.vite.org/zh/technology/design-features.html" target="_blank" rel="noopener">https://doc.vite.org/zh/technology/design-features.html</a></li>
+<li>We completed the designs for local storage structure and indexing for Vite Core. Local storage uses LevelDb. Since there is no official golang library for LevelDb, we have temporarily settled on a third-party library, also used by Ethereum. We plan to review the code in said library and assess its functionality and security.</li>
+<li>We completed the design of the network protocol and the definition of the message structure. Vite will implement inter-node communication with the structured P2P network. Routing between nodes will be using the KAD algorithm, with the heartbeat using the quic protocol for communications (<a href="http://www.chromium.org/quic)" target="_blank" rel="noopener">http://www.chromium.org/quic)</a>. The quic protocol is a UDP-based communications protocol proposed by Google; it can effectively reduce latency in data transfers, and is used in multiple Tencent applications.</li>
+<li>We completed the product design, demand audit, architectural design, definition of API interfaces and planning of development for Vite’s official blockchain browser.</li>
+<li>In performing detailed design of the protocol layer, in order to implement the feature of forging rewards, we have made the following decision: responsive reactions in the ledger will not only reference request transactions, but also reference the creation of snapshot chain blocks. This design connects the DAG ledger and the snapshot chain in a clean manner, and makes implementation easier.</li>
+</ul>
+<h2 id="Recruiting"><a href="#Recruiting" class="headerlink" title="Recruiting"></a>Recruiting</h2><p>We added four engineers (including system architects, backend engineers and front end engineers) and one product manager. All new hires came from first-rate internet technology firms. The current engineering team headcount is 11.</p>
+<h2 id="Operations-and-Community-Development"><a href="#Operations-and-Community-Development" class="headerlink" title="Operations and Community Development"></a>Operations and Community Development</h2><p>Due to high ratings from various overseas review websites, the number of our English Telegram Group has reached 42000 and our Chinese Telegram Group has reached 13000. We also added Telegram Groups for Vietnam, Russia, Korea and Thailand. A sample of websites that rated us: icodrops.com, monoico.com and top7ico.</p>
+<h2 id="The-Vite-Incubator"><a href="#The-Vite-Incubator" class="headerlink" title="The Vite Incubator"></a>The Vite Incubator</h2><p>Vite is proactively planning for the ecosystem development of our public blockchain. We are pleased to announce that our newly created incubator will be led by Frank Deng:</p>
+<p>Frank is a an expert in digital and mobile marketing. He graduated BA from Tsinghua University, served in Google Ads Operations Group, was COO of Suizong Technology and co-founder of Yunke Technology.</p>
+<p>The first set of incubated projects will be in the financial technology sector, with two important items in the pipeline. Details will be announced at a later date.</p>
+<h2 id="External-Communications"><a href="#External-Communications" class="headerlink" title="External Communications"></a>External Communications</h2><p>Sample of events from this month:</p>
+<ul>
+<li>Roadshow in Beijing on June 9</li>
+<li>Meeting with key advisors in Beijing on June 14</li>
+<li>Project information exchange in Shanghai held by our investor UniValue Associates, June 26</li>
+<li>Vite’s COO Richard was interviewed by the blockchain media firm Tuoniao for his experience of doing a Chinese startup as an ex-pat, June 26</li>
+<li>Vite’s COO Richard presented at Genesis Capital’s roadshow in Silicon Valley and networked with fellow blockchain investors and entrepreneurs at the Silicon Valley Blockchain Connect conference, June 26–28</li>
+</ul>
+<p><img src="/images/pasted-1.png" alt="upload successful"></p>
+<blockquote>
+<p>Charles Liu (CEO) presenting at Beijing roadshow</p>
+</blockquote>
+<p><img src="/images/pasted-2.png" alt="upload successful"></p>
+<blockquote>
+<p>Richard Yan (COO) presenting at Silicon Valley Blockchain Week</p>
+</blockquote>
+<p><img src="/images/pasted-3.png" alt="upload successful"></p>
+<blockquote>
+<p>Richard Yan (COO) with Blockchain Brad and CoinCrunch’s Sia at Silicon Valley Blockchain Connect</p>
+</blockquote>
+<p><img src="/images/pasted-4.png" alt="upload successful"></p>
+<blockquote>
+<p>Meeting with key advisors Daniel Wang (Loopring) and Leah Zhang (LinkVC, ex-Huobi). From left to right: Charles (CEO), Daniel, Leah, Richard (COO)</p>
+</blockquote>
+<h2 id="Partnership-with-OK-Blockchain-Capital"><a href="#Partnership-with-OK-Blockchain-Capital" class="headerlink" title="Partnership with OK Blockchain Capital"></a>Partnership with OK Blockchain Capital</h2><p>Previously announced: <a href="https://medium.com/vitelabs/vite-and-ok-blockchain-capital-enter-into-strategic-partnership-38a1ad9c5b37" target="_blank" rel="noopener">https://medium.com/vitelabs/vite-and-ok-blockchain-capital-enter-into-strategic-partnership-38a1ad9c5b37</a></p>
+<h2 id="Token-release"><a href="#Token-release" class="headerlink" title="Token release"></a>Token release</h2><p>We released 20% of tokens on June 15. The remainder will be released over the next four months, with 20% released on each of the 15th.</p>
+<h2 id="Vite-Tidbits"><a href="#Vite-Tidbits" class="headerlink" title="Vite Tidbits"></a>Vite Tidbits</h2><ul>
+<li>The DAG (Directed Acyclic Graph) is a graph data structure, with directed edges and no loops. Our ledger makes use of this structure to preserve partial order between transactions. The ordering of transactions affects the state of the system. To prevent historical transactions from being tampered with, nodes in the graph are referenced by hashes. The higher amount of partial orders, the “lean and long” the DAG looks, and the more secure is the ledger. On the other hand, the fewer partial orders there are, the “flat and horizontal” the DAG looks, and the higher the performance. The one DAG with the highest amount of partial orders preserves the “total order” of transactions and has the highest level of security, and this DAG is called a blockchain. That’s right, a blockchain is also a special case of DAG.</li>
+<li>The Snapshot Chain is an important innovation of Vite. This technology addresses the innate deficiency of security in DAG, and provides the mechanism for asynchronous verification of transactions. Also, the Snapshot Chain is the global clock for the system, as it helps with the accurate calculation of the TPS for each account.</li>
+<li>Vite’s token issuance mechanism is similar to ERC20 of Ethereum, but there are some fundamental differences. ERC20 is a standard, but not a part of the Ethereum protocol. To issue new tokens on the Ethereum, the user needs to develop and deploy a smart contract, and the balance of tokens is preserved in the state of the said contract. Any error in the development of that contract will create security risks. As an example, if the creator of the smart contract forgets to reference the SaftMath library, they may have introduced an overflow bug. On the other hand, the issuance of Vite tokens takes place within Vite’s own protocol, and the balance of tokens is preserved in the state of the user’s account. The new tokens share the same base protocol for transfers, and therefore the same level of security as Vite’s native token. In order to issue a new token in Vite, the user only needs to initiate a transaction, and place the new token’s parameters inside the data field of the transaction. There is no need for writing code for the smart contract, thereby lessening security risks.</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <hr/>
+<div id="post_footer" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%;">
+<p><strong>Our official website:</strong> <a href="https://www.vite.org/" target="_blank" rel="noopener">https://www.vite.org/</a></p>
+<p><strong>Telegram:</strong></p>
+<ul>
+<li>English: <a href="https://t.me/vite_en" target="_blank" rel="noopener">https://t.me/vite_en</a></li>
+<li>Chinese: <a href="https://t.me/vite_cn" target="_blank" rel="noopener">https://t.me/vite_cn</a></li>
+<li>Russian: <a href="https://t.me/vite_russia" target="_blank" rel="noopener">https://t.me/vite_russia</a></li>
+<li>Korean: <a href="https://t.me/vite_korean" target="_blank" rel="noopener">https://t.me/vite_korean</a></li>
+<li>Vietnamese: <a href="https://t.me/vite_vietnamese" target="_blank" rel="noopener">https://t.me/vite_vietnamese</a></li>
+<li>Thai: <a href="https://t.me/vite_thailand" target="_blank" rel="noopener">https://t.me/vite_thailand</a></li>
+</ul>
+<p><strong>Twitter:</strong> <a href="https://twitter.com/vitelabs" target="_blank" rel="noopener">https://twitter.com/vitelabs</a></p>
+<p><strong>Discord:</strong> <a href="https://discordapp.com/invite/CsVY76q" target="_blank" rel="noopener">https://discordapp.com/invite/CsVY76q</a></p>
+</div>
+<hr/>
+
+      </div>
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/vitelabs_wechat.jpg" alt="Vite Labs wechat" style="width: 200px; max-width: 100%;"/>
+    <div>You can follow our wechat to get more info about vite.</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Vite Labs</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://vite.blog/en/2018/07/03/report-2018-6/" title="Vite Update — June 2018">http://vite.blog/en/2018/07/03/report-2018-6/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Report/" rel="tag"># Report</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/en/2018/06/14/report-2018-5/" rel="next" title="VITE Update — May 2018">
+                <i class="fa fa-chevron-left"></i> VITE Update — May 2018
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/zh-CN/2018/07/04/【Vite】6月项目进度报告/" rel="prev" title="【Vite】6月项目进度报告">
+                【Vite】6月项目进度报告 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<div class="addthis_inline_share_toolbox">
+  <script type = "text/javascript" src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5b21d5d41d053c18" async = "async" ></script>
+</div>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo_appstore.png"
+                alt="Vite Labs" />
+            
+              <p class="site-author-name" itemprop="name">Vite Labs</p>
+              <p class="site-description motion-element" itemprop="description">Vite - A Next Generation High-performance Decentralized Application Platform</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://vite.org/" target="_blank" title="Website" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Website</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vitelabs" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://bitcointalk.org/index.php?topic=4438416" target="_blank" title="Bitcointalk" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Bitcointalk</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/vitelabs" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_en" target="_blank" title="English" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>English</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_zh" target="_blank" title="Chinese" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Chinese</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_ann" target="_blank" title="Announcement" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Announcement</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.reddit.com/r/vitelabs" target="_blank" title="Reddit" rel="external nofollow"><i class="fa fa-fw fa-reddit"></i>Reddit</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://discordapp.com/invite/CsVY76q" target="_blank" title="Discord" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Discord</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Software-Development"><span class="nav-number">1.</span> <span class="nav-text">Software Development</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recruiting"><span class="nav-number">2.</span> <span class="nav-text">Recruiting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operations-and-Community-Development"><span class="nav-number">3.</span> <span class="nav-text">Operations and Community Development</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Vite-Incubator"><span class="nav-number">4.</span> <span class="nav-text">The Vite Incubator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#External-Communications"><span class="nav-number">5.</span> <span class="nav-text">External Communications</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Partnership-with-OK-Blockchain-Capital"><span class="nav-number">6.</span> <span class="nav-text">Partnership with OK Blockchain Capital</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Token-release"><span class="nav-number">7.</span> <span class="nav-text">Token release</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vite-Tidbits"><span class="nav-number">8.</span> <span class="nav-text">Vite Tidbits</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vite Labs</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a target="_blank" href="https://vite.org"><b>Let's create something cool!</b></a></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-reading-progress@1.1/reading_progress.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://vitelabs.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://vite.blog/en/2018/07/03/report-2018-6/';
+        this.page.identifier = 'en/2018/07/03/report-2018-6/';
+        this.page.title = 'Vite Update — June 2018';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://vitelabs.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              var scrollTop = document.documentElement.scrollTop;
+              if (scrollTop >= offsetTop) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.min.css">
+
+  
+  
+    
+  
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Twitter,Facebook,GooglePlus,Reddit,Tumblr,GoogleBookmarks,Weibo,Pinterest,Wechat";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

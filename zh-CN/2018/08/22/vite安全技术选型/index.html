@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en,zh-CN,zh-HK">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="TFFddVIg_vEByGvDAQepGaiVHv8bTyugfg_TTtu8pbQ" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icon.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/icon.png?v=6.3.0" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      appId: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="序言非对称加密，Hash等安全算法是区块链的基石，就像碳氢氧对人的构成一般，区块链就是在这些安全算法的基础上再通过共识机制有机的组织起来。在安全算法的背后有许许多多的实现，我们的Vite是如何在N字路口前抉择的呢？">
+<meta name="keywords" content="安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vite安全技术选型">
+<meta property="og:url" content="http://vite.blog/zh-CN/2018/08/22/vite安全技术选型/index.html">
+<meta property="og:site_name" content="Vite Labs">
+<meta property="og:description" content="序言非对称加密，Hash等安全算法是区块链的基石，就像碳氢氧对人的构成一般，区块链就是在这些安全算法的基础上再通过共识机制有机的组织起来。在安全算法的背后有许许多多的实现，我们的Vite是如何在N字路口前抉择的呢？">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-18T08:02:12.134Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vite安全技术选型">
+<meta name="twitter:description" content="序言非对称加密，Hash等安全算法是区块链的基石，就像碳氢氧对人的构成一般，区块链就是在这些安全算法的基础上再通过共识机制有机的组织起来。在安全算法的背后有许许多多的实现，我们的Vite是如何在N字路口前抉择的呢？">
+
+
+
+
+
+
+  <link rel="canonical" href="http://vite.blog/zh-CN/2018/08/22/vite安全技术选型/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>vite安全技术选型 | Vite Labs</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120867177-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-120867177-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?19f189ffcd7c9d3f58c2773af190b087";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    
+          <div class="custom-logo-site-title">
+                <a href="/" class="brand" rel="start">
+                  <span class="logo-line-before"><i></i></span>
+                  <span class="site-title">Vite Labs</span>
+                  <span class="logo-line-after"><i></i></span>
+                </a>
+          </div>
+    
+
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Let's create something cool</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/zh-CN/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/zh-CN/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/zh-CN/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/zh-CN/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+
+      <li class="menu-item menu-item-lang">
+            <a href="javascript:;"><i class="menu-item-icon fa fa-fw fa-globe"></i>
+            <br />
+            <span>简体中文</span></a>
+
+            <select id="lang-select" onchange="changeLang()">
+               
+                        <option value="en"
+                        
+                        >English</option>
+               
+                        <option value="zh-CN"
+                        
+                             selected = "selected"
+                        
+                        >简体中文</option>
+               
+            </select>
+      </li>
+
+      <script>
+               function changeLang() {
+                    var lang = document.getElementById("lang-select").value;
+                    window.location = "/" + lang + "/";
+               }
+      </script>
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vite.blog/zh-CN/2018/08/22/vite安全技术选型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vite Labs">
+      <meta itemprop="description" content="Vite - A Next Generation High-performance Decentralized Application Platform">
+      <meta itemprop="image" content="/uploads/logo_appstore.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vite Labs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">vite安全技术选型<a href="https://github.com/vitelabs/vite.blog/edit/master/source/_posts/zh-CN/vite安全技术选型.md" class="post-edit-link" title="编辑" target="_blank">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-22 15:16:25" itemprop="dateCreated datePublished" datetime="2018-08-22T15:16:25+00:00">2018-08-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-18 08:02:12" itemprop="dateModified" datetime="2018-09-18T08:02:12+00:00">2018-09-18</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/zh-CN/2018/08/22/vite安全技术选型/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="zh-CN/2018/08/22/vite安全技术选型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>非对称加密，Hash等安全算法是区块链的基石，就像碳氢氧对人的构成一般，区块链就是在这些安全算法的基础上再通过共识机制有机的组织起来。在安全算法的背后有许许多多的实现，我们的Vite是如何在N字路口前抉择的呢？<br><a id="more"></a></p>
+<h1 id="一、数字签名算法-Ed25519"><a href="#一、数字签名算法-Ed25519" class="headerlink" title="一、数字签名算法 - Ed25519"></a>一、数字签名算法 - <a href="https://ed25519.cr.yp.to/" target="_blank" rel="noopener">Ed25519</a></h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>数字签名的目的是创造和我们合同上签字一样的<strong>不可抵赖性</strong>，其核心属性是：通过签名的消息可以明确知道其发起人，因为只有唯一的签名者的私钥才能计算出有效的签名，这也就意味着该消息确实是签名方生成的，这种证明在一些国家具有法律上的意义，比如美国的电子签名法案，德国的签名法等。</p>
+<p>私钥签名，然后公布公钥、消息和签名数据让大家去验证，在这些步骤中公私钥对扮演着最重要的角色，它们总是成对出现，而且就像量子纠缠一样互不分离。公私钥一般是通过一个特殊的单向函数和一个随机数生成，这种单向函数往往正向求解（ f(x) = y） 是多项式难度，而逆向求解（ f<sup>-1</sup>(y) = x）是指数级难度。假设x是私钥，y是公钥，那么从私钥推导出公钥在现代计算机体系上需要大到没有任何单位能承受的消耗，所以在目前来看是非常安全的，但是如果量子计算机在未来真的能研究出来的话，那么现在这些广泛基于RSA，DLP（离散对数问题），和从DL上扩展来的ECC（椭圆曲线密码学）的非对称加密机制都是不安全的，如何做到quantum safe，这大约是个和研究量子计算机一样漫长的岁月。</p>
+<p>签名算法在区块链系统中处于<strong>最基础</strong>的位置，账户地址、交易的产生都与之紧密相关，所以在签名算法的选择上，我们必须兼顾<strong>安全</strong>和<strong>性能</strong>，其中安全是首要的，中本聪当时选择的是ECDSA over secp256k1，secp256k1是SECG定义的一个Koblitz曲线，在他使用前几乎无人问津，它设计透明，而不像NIST选中的secp256r1（也就是现在主流常用的P256）曲线中有一些诡异的参数，这些参数被广泛地认为是NSA植入的<a href="https://www.ams.org/notices/201402/rnoti-p190.pdf" target="_blank" rel="noopener">后门</a>，后来的一系列事件也确实证明了中本聪的选择是非常具有前瞻性的，于是以太坊、EOS等也都跟进了中本聪的想法，但是随着Ed25519专利期限制解除，包括<a href="https://bitcointalk.org/index.php?topic=103172.msg1134832#msg1134832" target="_blank" rel="noopener">比特币的核心开发者们</a>和<a href="https://blog.ethereum.org/2015/07/05/on-abstraction/" target="_blank" rel="noopener">Vitalik Buterin</a>都讨论过是否迁移到Ed25519，链接中可见他们的态度都比较暧昧地倾向于使用Ed25519，但可能由于迁移成本太大所以未能成行，而ripple则是在14年就果断迁移了过去。</p>
+<h2 id="安全性考量"><a href="#安全性考量" class="headerlink" title="安全性考量"></a>安全性考量</h2><p>Ed25519在安全性上经过大量独立的知名安全专家评测后被认为是”safe”，而secp256k1是”unsafe”，<a href="https://safecurves.cr.yp.to/" target="_blank" rel="noopener">参考链接</a>。</p>
+<h2 id="性能考量"><a href="#性能考量" class="headerlink" title="性能考量"></a>性能考量</h2><p>vite为了满足了工业级应用对高吞吐、低延迟和扩展性的要求，设计了许多优化的方案，比如提出了”交易分解”这个概念，其含义是会把一个交易拆成类似于”请求”和”响应”这样的一对交易，那么再结合我们如此高的TPS，可以预见在vite的公链系统中对交易的验证和确认是非常频繁发生的，也就是说整体系统的性能表现对签名和验签算法的速度高低会相当敏感。根据现在的数据Ed25519的性能数倍快于ECDSA over secp256k1 (<a href="https://ripple.com/dev-blog/curves-with-a-twist/" target="_blank" rel="noopener">ripple的benchmark</a>)，我相信这对我们系统的性能提升会带来很大的帮助。不仅如此，Ed25519的签名长度也略小于ECDSA，这给就网络传输和存储系统减轻了不小的压力。</p>
+<p>（更详细的Benchmark可以参考<a href="https://bench.cr.yp.to/primitives-sign.html" target="_blank" rel="noopener">链接</a>）</p>
+<h2 id="改造"><a href="#改造" class="headerlink" title="改造"></a>改造</h2><p>我们把标准Ed25519的SHA2替换成了Blake2b。</p>
+<h2 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h2><p>由于密钥空间是非线性的，无法兼容BIP的Hierarchical Deterministic Key Derivation。</p>
+<hr>
+<h1 id="二、Hash算法-Blake2b"><a href="#二、Hash算法-Blake2b" class="headerlink" title="二、Hash算法 - Blake2b"></a>二、Hash算法 - <a href="https://blake2.net/" target="_blank" rel="noopener">Blake2b</a></h1><h2 id="背景-1"><a href="#背景-1" class="headerlink" title="背景"></a>背景</h2><p>哈希算法的作用是对一串任意长的消息生成一个短的固定长的摘要，Hash函数也是一个单向函数，但是和非对称加密系统中的单向函数的差别在于，后者的单向函数往往是追求反向求解在实际操作上不可能，但理论上是可能的，或者换句话说公钥含有推导出私钥的完整信息。但是哈希函数则不一样它理论上不能逆向，而实际上却往往可以，理论上来说，一个哈希值可以有无穷多个原像对应它，给一个简单的证明，假设一个哈希函数的输出是n个bit，那么这个Hash函数的所有输出值只有2<sup>n</sup>个，而输入是无限制的，那么根据鸽巢原理，如果输入的原像是m * 2<sup>n</sup>个bit长且Hash函数的输出是均匀分布的，那么即使得到某个X，使得Hash(X) = target，这样X只是有1/m的概率是真实的原像（如果Hash函数输出不是均以分布那么其概率更小）。但实际上受限于存储和计算能力，输入的原文的长度不会很长，这意味着m的值不会很大，所以X是真实原像的概率还是比较大的。</p>
+<p>Hash函数在我们的系统中，担负着挖矿，数据的防篡改等功能，它和签名算法一样是<strong>最基础</strong>的组件，所以同样我们在技术选型的时候要着重考量其<strong>安全</strong>和<strong>性能</strong>。</p>
+<h1 id="安全性考量-1"><a href="#安全性考量-1" class="headerlink" title="安全性考量"></a>安全性考量</h1><p>Blake2的前身是Blake，Blake和keccak当时一起竞争SHA3标准的时候失利了，当时失利的原因是Blake和sha2的实现有点相似，而NIST的目标是一个完全不同于SHA2标准的Hash算法。</p>
+<blockquote>
+<p>desire for SHA-3 to complement the existing SHA-2 algorithms … BLAKE is rather similar to SHA-2.</p>
+</blockquote>
+<p>事实上在安全性评估上NIST给了Blake相当高的评价，其 <a href="https://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf" target="_blank" rel="noopener">report</a>形容Blake，</p>
+<blockquote>
+<p>“BLAKE and Keccak have very large security margins.”。</p>
+</blockquote>
+<p>所以一般而言我们可以认为blake2的安全性和keccak不会有大的区别。</p>
+<h2 id="性能考量-1"><a href="#性能考量-1" class="headerlink" title="性能考量"></a>性能考量</h2><p>根据大量的数据Blake2的性能表现在现代的通用CPU(X86 ARM等)上的表现远远领先于其它任何Hash算法。（具体性能表现可以参考<a href="http://bench.cr.yp.to/results-sha3.html" target="_blank" rel="noopener">链接</a>）</p>
+<p>Blake2的另一个特点是用ASIC设计的Blake2算法能达到的峰值并不会很高，这就意味着挖矿的峰值速率相对较低，这也是我们希望的。</p>
+<hr>
+<h1 id="三、-密钥派生函数-scrypt"><a href="#三、-密钥派生函数-scrypt" class="headerlink" title="三、 密钥派生函数 - scrypt"></a>三、 密钥派生函数 - <a href="https://github.com/Tarsnap/scrypt" target="_blank" rel="noopener">scrypt</a></h1><h2 id="背景-2"><a href="#背景-2" class="headerlink" title="背景"></a>背景</h2><p>密钥派生函数(Key Derivation Function) ，简单而言就是使用一个主密钥派生子密钥的函数，比如把一个短的字符串通过KDF的运算扩展成需要的形式，它和Hash函数很类似，最大不同在于它会引入随机量从而防止黑客进行一些查表攻击等（比如彩虹表 rainbow tables）。我们采用的scrypt是一种内存依赖性的KDF，它每一次计算都要占用大量内存资源，消耗很长时间，所以暴力攻击也几乎是不可能的。</p>
+<p>KDF在我们的系统中处于非基础性的地位，我们把用户输入的随机短密码经过KDF之后，转换成256bits的密钥，然后使用这个密钥配合AES-256-GCM算法，加密Ed25519私钥，从而安全地在PC上保存我们的私钥。</p>
+<h2 id="选择原因"><a href="#选择原因" class="headerlink" title="选择原因"></a>选择原因</h2><p>从技术角度来看scrypt相比于获得15年的Password Hashing Competition的argon2来说安全性上并没有大的区别，但是由于其诞生更早使用更广泛所以在实践角度看显得更成熟一点，argon2如果再有两到三年年仍然没有被发现大的问题，我们也有可能会使用它。</p>
+<hr>
+<h1 id="四、相关名词解释"><a href="#四、相关名词解释" class="headerlink" title="四、相关名词解释"></a>四、相关名词解释</h1><p>ECDSA(Elliptic Curve Digital Signature Algorithm)是使用椭圆曲线的数字签名算法</p>
+<ul>
+<li><p>secp256k1是ECDSA算法的一个参数</p>
+<ul>
+<li>sec是SECG（Standards for Efficient Cryptography Group） 推出的 Standards for Efficient Cryptogrpahy</li>
+<li>p的意思是这个椭圆曲线使用 prime field，相对应的</li>
+<li>256的意思是 prime的长度是256bits</li>
+<li>k 是Koblitz曲线</li>
+<li>1 意味着它是第一个(事实上也是唯一)标准曲线的类型</li>
+</ul>
+</li>
+<li><p>Ed25519 是一个使用SHA512/256的和<a href="https://en.wikipedia.org/wiki/Curve25519" target="_blank" rel="noopener">Curve25519</a>的 <a href="https://en.wikipedia.org/wiki/EdDSA" target="_blank" rel="noopener">EdDSA签名算法</a></p>
+</li>
+<li><p>NIST(National Institute of Standards and Technology) 美国国家标准与技术研究院，他们制定了一些安全标准，比如SHA3,P256等</p>
+</li>
+<li><p>NSA(National Security Agency) 美国国家安全局</p>
+</li>
+<li><p>AES-256-GCM 256位密钥的拥有对消息的加密和完整性校验对称加密算法</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <hr/>
+<div id="post_footer" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%;">
+<p><strong>Our official website:</strong> <a href="https://www.vite.org/" target="_blank" rel="noopener">https://www.vite.org/</a></p>
+<p><strong>Telegram:</strong></p>
+<ul>
+<li>English: <a href="https://t.me/vite_en" target="_blank" rel="noopener">https://t.me/vite_en</a></li>
+<li>Chinese: <a href="https://t.me/vite_cn" target="_blank" rel="noopener">https://t.me/vite_cn</a></li>
+<li>Russian: <a href="https://t.me/vite_russia" target="_blank" rel="noopener">https://t.me/vite_russia</a></li>
+<li>Korean: <a href="https://t.me/vite_korean" target="_blank" rel="noopener">https://t.me/vite_korean</a></li>
+<li>Vietnamese: <a href="https://t.me/vite_vietnamese" target="_blank" rel="noopener">https://t.me/vite_vietnamese</a></li>
+<li>Thai: <a href="https://t.me/vite_thailand" target="_blank" rel="noopener">https://t.me/vite_thailand</a></li>
+</ul>
+<p><strong>Twitter:</strong> <a href="https://twitter.com/vitelabs" target="_blank" rel="noopener">https://twitter.com/vitelabs</a></p>
+<p><strong>Discord:</strong> <a href="https://discordapp.com/invite/CsVY76q" target="_blank" rel="noopener">https://discordapp.com/invite/CsVY76q</a></p>
+</div>
+<hr/>
+
+      </div>
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/vitelabs_wechat.jpg" alt="Vite Labs wechat" style="width: 200px; max-width: 100%;"/>
+    <div>You can follow our wechat to get more info about vite.</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Vite Labs</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://vite.blog/zh-CN/2018/08/22/vite安全技术选型/" title="vite安全技术选型">http://vite.blog/zh-CN/2018/08/22/vite安全技术选型/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安全/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/en/2018/08/21/A-brief-analysis-of-MPT-and-its-application-in-Ethereum/" rel="next" title="A brief analysis of MPT and its application in Ethereum">
+                <i class="fa fa-chevron-left"></i> A brief analysis of MPT and its application in Ethereum
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/en/2018/08/22/the-selection-of-security-algorithm-of-vite/" rel="prev" title="The Selection of Security Algorithm of Vite">
+                The Selection of Security Algorithm of Vite <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<div class="addthis_inline_share_toolbox">
+  <script type = "text/javascript" src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5b21d5d41d053c18" async = "async" ></script>
+</div>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo_appstore.png"
+                alt="Vite Labs" />
+            
+              <p class="site-author-name" itemprop="name">Vite Labs</p>
+              <p class="site-description motion-element" itemprop="description">Vite - A Next Generation High-performance Decentralized Application Platform</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://vite.org/" target="_blank" title="Website" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Website</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/vitelabs" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://bitcointalk.org/index.php?topic=4438416" target="_blank" title="Bitcointalk" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Bitcointalk</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/vitelabs" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_en" target="_blank" title="English" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>English</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_zh" target="_blank" title="Chinese" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Chinese</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://t.me/vite_ann" target="_blank" title="Announcement" rel="external nofollow"><i class="fa fa-fw fa-telegram"></i>Announcement</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.reddit.com/r/vitelabs" target="_blank" title="Reddit" rel="external nofollow"><i class="fa fa-fw fa-reddit"></i>Reddit</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://discordapp.com/invite/CsVY76q" target="_blank" title="Discord" rel="external nofollow"><i class="fa fa-fw fa-globe"></i>Discord</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一、数字签名算法-Ed25519"><span class="nav-number">2.</span> <span class="nav-text">一、数字签名算法 - Ed25519</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">2.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全性考量"><span class="nav-number">2.2.</span> <span class="nav-text">安全性考量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能考量"><span class="nav-number">2.3.</span> <span class="nav-text">性能考量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改造"><span class="nav-number">2.4.</span> <span class="nav-text">改造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不足"><span class="nav-number">2.5.</span> <span class="nav-text">不足</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Hash算法-Blake2b"><span class="nav-number">3.</span> <span class="nav-text">二、Hash算法 - Blake2b</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景-1"><span class="nav-number">3.1.</span> <span class="nav-text">背景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安全性考量-1"><span class="nav-number">4.</span> <span class="nav-text">安全性考量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#性能考量-1"><span class="nav-number">4.1.</span> <span class="nav-text">性能考量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、-密钥派生函数-scrypt"><span class="nav-number">5.</span> <span class="nav-text">三、 密钥派生函数 - scrypt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景-2"><span class="nav-number">5.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择原因"><span class="nav-number">5.2.</span> <span class="nav-text">选择原因</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、相关名词解释"><span class="nav-number">6.</span> <span class="nav-text">四、相关名词解释</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vite Labs</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+
+
+
+
+
+
+  <div class="footer-custom"><a target="_blank" href="https://vite.org"><b>Let's create something cool!</b></a></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-reading-progress@1.1/reading_progress.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://vitelabs.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://vite.blog/zh-CN/2018/08/22/vite安全技术选型/';
+        this.page.identifier = 'zh-CN/2018/08/22/vite安全技术选型/';
+        this.page.title = 'vite安全技术选型';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://vitelabs.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              var scrollTop = document.documentElement.scrollTop;
+              if (scrollTop >= offsetTop) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+    
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.min.css">
+
+  
+  
+    
+  
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.4.1/dist/instantsearch.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Twitter,Facebook,GooglePlus,Reddit,Tumblr,GoogleBookmarks,Weibo,Pinterest,Wechat";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
